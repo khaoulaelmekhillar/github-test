@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Gestion List</title>
+</head>
+<body>
+    <h1> Gestion d'une liste </h1>
+ 
+    
+    <div id="content">
+        <div  id="header">
+            <input type="text" id="txt" placeholder="Nom de l'élément à ajouter.">
+            <input type="button" id="btn" value="Ajouter" onclick="addItem()">
+        </div>
+        <br>
+        <br>
+        <br> 
+       <div> 
+        Ajouter:
+            <input type="radio"   name="single-choice"   value="Au debut" id="choice-one">
+            <label >Au debut</label> 
+            <input type="radio" name="single-choice"   value="A la fin"  id="choice-two" checked >
+            <label >Ala fin</label> 
+            
+        <div  id="content-body">
+            <ul id="list">
+                <li class="item" > <span class="content-body-text">Element 2</span> <span > <button>edit</button> </span>  <span><button>delete</button></span> </li>
+                <li class="item"> <span class="content-body-text">Element 3</span> <span > <button>edit</button> </span>  <span><button>delete</button></span> </li>
+
+            </ul>
+        </div>
+    </div>
+    <script>
+        function addItem(){
+            /*  create edit button */
+            var editBtn=document.createElement('button')
+            editBtn.innerText="edit"
+            var editSpan=document.createElement('span')
+            editSpan.appendChild(editBtn)
+
+            /*  create delete button */ 
+            
+            var deleteBtn=document.createElement('button')
+            deleteBtn.innerText="delete"
+            var deleteSpan=document.createElement('span')
+            deleteSpan.appendChild(deleteBtn);
+            
+            /*  create text with  source from user input  */
+            var text=document.createElement('span')
+            text.className='content-body-text'
+            
+            /*-----------------Get text from the input --------------*/ 
+            var source=document.getElementById('txt')
+            text.innerText=source.value 
+            /* create list item */ 
+            var item=document.createElement('li');
+            item.className='item'
+     
+            /*     add all spans on the list item */
+
+            item.appendChild(text)
+            item.appendChild(editSpan)
+            item.appendChild(deleteSpan)
+           
+            /* get parent node */
+            var parentOfItems=document.getElementById('list');
+            /* when we shoud append the item : at first or at last */
+            let choiceOne=document.getElementById('choice-one')    
+            if(choiceOne.checked){
+                parentOfItems.prepend(item); 
+            }
+            else{ /* means that the second one which is selected */
+                parentOfItems.append(item)
+            }
+            addEvents()
+            
+        }
+
+        function addEvents(){
+            let items=document.getElementsByClassName('item');
+            for(let i=0 ; i<items.length ; i++){
+                var del=items[i].children[2]
+                var edit=items[i].children[1]
+                del.onclick=function (){
+                    'use strict';
+                     let targetToBeDeleted=items[i].children[2].parentNode;
+                     let hisParent=targetToBeDeleted.parentNode
+                    hisParent.removeChild(targetToBeDeleted)         
+                }
+                edit.onclick=function (){
+                     'use strict';
+                     let targetToBeDited=items[i].children[0]
+                     let oldContent=targetToBeDited.textContent
+                     let   input=document.getElementById('txt');
+                     input.value=oldContent
+                     /* create a new button to replace the button 'add' */
+                     let keepOldButton=document.getElementById('btn')
+                     let tmp=keepOldButton
+                     let tmpButton=document.createElement('button');
+                     tmpButton.id='btn'      
+                    tmpButton.value="Update"
+                    tmpButton.innerText="Update"
+                    
+                     keepOldButton.replaceWith(tmpButton)
+                    tmpButton.onclick=function (){
+                        targetToBeDited.innerText= input.value
+                        tmpButton.replaceWith(tmp)
+                   
+                    }
+                   
+
+                }
+            
+                 
+            }
+        }
+
+        addEvents()
+        
+    </script>
+</body>
+</html>
